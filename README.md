@@ -1,4 +1,4 @@
-# pcaplibrary
+# Pcap library
 Android library for pcap file creation from a byte stream.
 
 Library provides possibility to:
