@@ -39,28 +39,6 @@ class FileEngine: FileProvider() {
     }
   }
 
-  fun makePcapFile(file: File?, fileName: String?) {
-    Timber.d(TAG, "makePcapFile()")
-
-    val packetDir = File(
-        Environment.getExternalStorageDirectory().toString() + File.separator + "AppCheck")
-    var pcapFile = File(packetDir, "$fileName.pcap")
-
-    if (!pcapFile.exists()) {
-      pcapFile.createNewFile()
-    }
-
-    val headerBytes = packetEngine.createGlobalHeader()
-    val fileBytes = file?.readBytes() ?: byteArrayOf()
-
-    // Creates pcap file with proper headers.
-    val newArray = ByteArray(headerBytes.size + fileBytes.size)
-    System.arraycopy(headerBytes, 0, newArray, 0, headerBytes.size)
-    System.arraycopy(fileBytes, 0, newArray, headerBytes.size, fileBytes.size)
-
-    pcapFile.writeBytes(newArray)
-  }
-
   private fun makeTxtFile(absolutePath: String) {
 
     val txtFilePath = absolutePath.replaceAfterLast(".", "txt")
