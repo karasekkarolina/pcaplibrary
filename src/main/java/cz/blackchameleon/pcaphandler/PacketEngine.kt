@@ -44,7 +44,7 @@ class PacketEngine {
     return byteBuffer.array()
   }
 
-  fun createL2Header(): ByteArray {
+  fun createL2Header(uid: Int): ByteArray {
     Timber.d("createL2Header()")
     val byteBuffer = ByteBuffer.allocate(14)
     // destination addr
@@ -55,12 +55,9 @@ class PacketEngine {
     byteBuffer.put(0xB5.toByte())
     byteBuffer.put(0xA6.toByte())
     // source addr
-    byteBuffer.put(0xE0.toByte())
-    byteBuffer.put(0xAC.toByte())
-    byteBuffer.put(0xF1.toByte())
-    byteBuffer.put(0x74.toByte())
-    byteBuffer.put(0x73.toByte())
-    byteBuffer.put(0xC3.toByte())
+    byteBuffer.putInt(uid)
+    byteBuffer.put(0x00.toByte())
+    byteBuffer.put(0x00.toByte())
     // IPv4
     byteBuffer.put(0x08.toByte())
     byteBuffer.put(0x00.toByte())
