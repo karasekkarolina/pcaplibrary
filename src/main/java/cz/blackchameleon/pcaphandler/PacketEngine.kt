@@ -12,10 +12,9 @@ import java.nio.*
  */
 
 class PacketEngine {
-  private val TAG = PacketEngine::class.java.name
 
   fun createPacketHeader(length: Int): ByteArray {
-    Timber.d(TAG, "createPacketHeader(): %d", length)
+    Timber.d("createPacketHeader(): %d", length)
     /* Struct got from https://wiki.wireshark.org/Development/LibpcapFileFormat
     typedef struct pcaprec_hdr_s {
         guint32 ts_sec;         /* timestamp seconds */  13 ac fd 50  (0001001110101100 1111110101010000)2_b
@@ -46,7 +45,7 @@ class PacketEngine {
   }
 
   fun createL2Header(): ByteArray {
-    Timber.d(TAG, "createL2Header()")
+    Timber.d("createL2Header()")
     val byteBuffer = ByteBuffer.allocate(14)
     // destination addr
     byteBuffer.put(0x00.toByte())
@@ -70,7 +69,7 @@ class PacketEngine {
   }
 
   fun createGlobalHeader(): ByteArray {
-    Timber.d(TAG, "createGlobalHeader()")
+    Timber.d("createGlobalHeader()")
     /* Struct got from https://wiki.wireshark.org/Development/LibpcapFileFormat
     typedef struct pcap_hdr_s {
     guint32 magic_number;   /* magic number */  d4 c3 b2 a1    little-endian   (1101010011000011   1011001010100001)2_b
@@ -116,5 +115,4 @@ class PacketEngine {
 
     return byteBuffer.array()
   }
-
 }

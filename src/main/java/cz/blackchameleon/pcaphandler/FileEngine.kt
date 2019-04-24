@@ -21,8 +21,6 @@ import java.io.*
  */
 
 class FileEngine: FileProvider() {
-  private val TAG = FileEngine::class.java.name
-  private val packetEngine = PacketEngine()
 
   fun handleOnFileClick(absolutePath: String?, context: Context?) {
     if (absolutePath == null) {
