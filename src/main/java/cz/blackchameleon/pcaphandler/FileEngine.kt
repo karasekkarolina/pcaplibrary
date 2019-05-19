@@ -2,26 +2,27 @@ package cz.blackchameleon.pcaphandler
 
 import android.content.*
 import android.net.*
-import android.os.*
 import android.webkit.*
 import android.widget.*
 import androidx.core.content.*
 import io.pkts.*
 import io.pkts.packet.impl.*
 import io.pkts.protocol.*
-import timber.log.*
 import java.io.*
 
 /**
  * FileEngine
- * Engine for file handling
+ * Handles all computation for stored files info.
  *
  * @author Karolina Klepackova <klepackova.karolina@email.cz>
  * @since ver 1.1
  */
 
-class FileEngine: FileProvider() {
+class FileEngine : FileProvider() {
 
+  /**
+   * Is invoked when user chooses a file to be opened.
+   */
   fun handleOnFileClick(absolutePath: String?, context: Context?) {
     if (absolutePath == null) {
       Toast.makeText(context, "Sorry. This file doesn\'t exist.", Toast.LENGTH_SHORT).show()
@@ -30,6 +31,7 @@ class FileEngine: FileProvider() {
 
     val suffix = absolutePath.substringAfterLast(".")
 
+    // Decides what to do depending on file's suffix.
     when (suffix) {
       "pcap" -> makeTxtFile(absolutePath)
       "txt" -> openFile(absolutePath, context)
@@ -37,12 +39,15 @@ class FileEngine: FileProvider() {
     }
   }
 
+  /**
+   * Makes readable text file containing each packet's info from pcap file.
+   */
   private fun makeTxtFile(absolutePath: String) {
-
     val txtFilePath = absolutePath.replaceAfterLast(".", "txt")
     val txtFile = File(txtFilePath)
     val pcap: Pcap
 
+    // Creates stream from pcap file.
     try {
       pcap = Pcap.openStream(absolutePath)
     } catch (e: Exception) {
@@ -50,6 +55,7 @@ class FileEngine: FileProvider() {
       return
     }
 
+    // Iterates through whole file.
     pcap.loop {
       var string = ""
 
@@ -83,7 +89,7 @@ class FileEngine: FileProvider() {
   }
 
   /**
-   * Opens file via 3rd party app.
+   * Opens file via 3rd party app. Used for unsupported file formats.
    */
   private fun openFile(absolutePath: String, context: Context?) {
     val type = getMimeFileType(absolutePath)
@@ -95,6 +101,11 @@ class FileEngine: FileProvider() {
     context?.startActivity(intent)
   }
 
+  /**
+   * Returns mime type of file. Necessary for decision which 3rd party apps should be listed.
+   *
+   * @return Mime type of file in string.
+   */
   private fun getMimeFileType(url: String): String? {
     var type: String? = null
     val extension = MimeTypeMap.getFileExtensionFromUrl(url)
